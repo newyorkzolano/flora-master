@@ -1,103 +1,194 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+import { useReducer, useState, useRef, useMemo } from 'react';
+import useGameData from '@/hooks/use-game-data';
+import { SetupScreen } from '@/components/game/SetupScreen';
+import { QuizMode } from '@/components/game/QuizMode';
+import { ImageGuessingGame } from '@/components/game/ImageGuessingGame';
+import { LeafTreeMatching } from '@/components/game/LeafTreeMatching';
+import { EndScreen } from '@/components/game/EndScreen';
+import { DataEditor } from '@/components/game/DataEditor';
+import { IntroScreen } from '@/components/game/IntroScreen';
+import { Icons } from '@/components/icons';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import type { GameData } from '@/lib/types';
+import { motion, AnimatePresence } from 'framer-motion';
+import Confetti from 'react-confetti';
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+type GameState = 'intro' | 'setup' | 'edit' | 'quiz' | 'image-guessing' | 'matching' | 'end';
+
+// Definición del estado y las acciones para el reducer
+type State = {
+  gameState: GameState;
+  scores: { quiz: number; imageGuessing: number; matching: number; };
+  totals: { quiz: number; imageGuessing: number; matching: number; };
+};
+
+type Action =
+| { type: 'START_GAME' }
+| { type: 'ENTER_EDIT_MODE' }
+| { type: 'EXIT_EDIT_MODE' }
+| { type: 'COMPLETE_QUIZ'; payload: { score: number; total: number } }
+| { type: 'COMPLETE_IMAGE_GUESSING'; payload: { score: number; total: number } }
+| { type: 'COMPLETE_MATCHING'; payload: { score: number; total: number } }
+| { type: 'RESTART' }
+| { type: 'ANIMATION_COMPLETE' };
+
+const initialState: State = {
+  gameState: 'intro',
+  scores: { quiz: 0, imageGuessing: 0, matching: 0 },
+  totals: { quiz: 0, imageGuessing: 0, matching: 0 },
+};
+
+function gameReducer(state: State, action: Action): State {
+  switch (action.type) {
+    case 'ANIMATION_COMPLETE':
+      return { ...state, gameState: 'setup' };
+    case 'START_GAME':
+      return {
+        ...state,
+        scores: initialState.scores,
+        totals: initialState.totals,
+        gameState: 'quiz',
+      };
+    case 'ENTER_EDIT_MODE':
+      return { ...state, gameState: 'edit' };
+    case 'EXIT_EDIT_MODE':
+      return { ...state, gameState: 'setup'};
+    case 'COMPLETE_QUIZ':
+      return {
+        ...state,
+        gameState: 'image-guessing',
+        scores: { ...state.scores, quiz: action.payload.score },
+        totals: { ...state.totals, quiz: action.payload.total },
+      };
+    case 'COMPLETE_IMAGE_GUESSING':
+      return {
+        ...state,
+        gameState: 'matching',
+        scores: { ...state.scores, imageGuessing: action.payload.score },
+        totals: { ...state.totals, imageGuessing: action.payload.total },
+      };
+    case 'COMPLETE_MATCHING':
+      return {
+        ...state,
+        gameState: 'end',
+        scores: { ...state.scores, matching: action.payload.score },
+        totals: { ...state.totals, matching: action.payload.total },
+      };
+    case 'RESTART':
+      return {
+        ...state,
+        scores: initialState.scores,
+        totals: initialState.totals,
+        gameState: 'setup',
+      };
+    default:
+      throw new Error(`Unhandled action type: ${(action as any).type}`);
+  }
 }
+
+const GameContent = () => {
+  const [state, dispatch] = useReducer(gameReducer, initialState);
+  const { gameData, isLoaded, error, setGameData } = useGameData();
+  const [showConfetti, setShowConfetti] = useState(false);
+  const confettiTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const totalScore = useMemo(() => {
+    return state.scores.quiz + state.scores.imageGuessing + state.scores.matching;
+  }, [state.scores]);
+
+  const triggerConfetti = () => {
+    if (confettiTimerRef.current) {
+      clearTimeout(confettiTimerRef.current);
+    }
+    setShowConfetti(true);
+    confettiTimerRef.current = setTimeout(() => {
+      setShowConfetti(false);
+    }, 4000);
+  };
+
+  const handleStartGame = () => dispatch({ type: 'START_GAME' });
+  const handleEnterEditMode = () => dispatch({ type: 'ENTER_EDIT_MODE' });
+
+  const handleQuizComplete = (score: number, total: number) => {
+    dispatch({ type: 'COMPLETE_QUIZ', payload: { score, total } });
+  };
+
+  const handleImageGuessingComplete = (score: number, total: number) => {
+    dispatch({ type: 'COMPLETE_IMAGE_GUESSING', payload: { score, total } });
+  };
+
+  const handleMatchingComplete = (score: number, total: number) => {
+    dispatch({ type: 'COMPLETE_MATCHING', payload: { score, total } });
+  };
+
+  const handleRestart = () => dispatch({ type: 'RESTART' });
+
+  const handleExitEditMode = (newData?: GameData) => {
+    if (newData) {
+      setGameData(newData);
+    }
+    dispatch({ type: 'EXIT_EDIT_MODE' });
+  };
+
+  const handleAnimationComplete = () => {
+    dispatch({ type: 'ANIMATION_COMPLETE' });
+  };
+
+  const renderGameContent = () => {
+    if (error) {
+      return (
+        <Alert variant="destructive" className="max-w-md">
+        <Icons.X className="h-4 w-4" />
+        <AlertTitle>Error al Cargar los Datos</AlertTitle>
+        <AlertDescription>
+        No se pudieron cargar los datos. Revisa la consola para más detalles.
+        <p className="mt-2 text-xs">({error})</p>
+        </AlertDescription>
+        </Alert>
+      )
+    }
+
+    if (!isLoaded || !gameData) {
+      return (
+        <div className="flex flex-col items-center justify-center min-h-screen">
+        <Icons.Flower className="w-16 h-16 animate-spin text-primary" />
+        <p className="mt-4 text-lg text-primary/80">Cargando Flora Master...</p>
+        </div>
+      );
+    }
+
+    const plantsForGuessing = gameData.images.filter(img => img.type === 'plant' && img.options && img.options.length > 0);
+
+    switch (state.gameState) {
+      case 'intro':
+        return <IntroScreen onAnimationComplete={handleAnimationComplete} />;
+      case 'setup':
+        return <SetupScreen onStartGame={handleStartGame} onEnterEditMode={handleEnterEditMode} />;
+      case 'edit':
+        return <DataEditor initialData={gameData} onExit={handleExitEditMode} />;
+      case 'quiz':
+        return <QuizMode questions={gameData.questions} onComplete={handleQuizComplete} onCorrectAnswer={triggerConfetti} />;
+      case 'image-guessing':
+        return <ImageGuessingGame allImages={plantsForGuessing} onComplete={handleImageGuessingComplete} onCorrectAnswer={triggerConfetti} />;
+      case 'matching':
+        return <LeafTreeMatching allImages={gameData.images} allPairs={gameData.pairs} onComplete={handleMatchingComplete} onCorrectAnswer={triggerConfetti} />;
+      case 'end':
+        return <EndScreen scores={state.scores} totals={state.totals} onRestart={handleRestart} />;
+      default:
+        return <div>Error: Estado de juego desconocido.</div>;
+    }
+  };
+
+  return (
+    <main className="relative flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 md:p-12 bg-background overflow-hidden bg-leaves">
+    {showConfetti && <Confetti recycle={false} numberOfPieces={300} />}
+
+    <header className="absolute top-4 left-4 sm:top-6 sm:left-8 z-20 flex items-center gap-2">
+    <Icons.Leaf className="w-8 h-8 text-primary" />
+    <h1 className="text-xl font-bold font-headline text-primary">Flora Master</h1>
+    </header>
+
+    {(state.gameState === 'quiz' || state.gameState === 'image-guessing' || state.gameState === 'matching') && (
+
