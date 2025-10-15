@@ -1,0 +1,13 @@
+
+{
+  "pairs": [
+    {
+      "leafId": "hoja_de_roble",
+      "treeId": "arbol_roble"
+    },
+    {
+      "leafId": "hoja_de_pino",
+      "treeId": "arbol_pino"
+    }
+  ]
+}

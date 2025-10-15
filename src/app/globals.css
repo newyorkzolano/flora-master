@@ -1,26 +1,99 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 21 23% 25%; /* Marrón Tierra: #4E3B31 */
+    --foreground: 40 33% 85%; /* Light Tan */
+
+    --card: 21 23% 20%; /* Darker brown */
+    --card-foreground: 40 33% 85%;
+
+    --popover: 21 23% 20%;
+    --popover-foreground: 40 33% 85%;
+
+    --primary: 147 41% 39%; /* Forest Green: #388E3C */
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 215.4 16.3% 46.9%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 147 41% 39%; /* Forest Green as accent */
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --success: 130 60% 40%;
+    --success-foreground: 0 0% 98%;
+
+    --border: 21 23% 35%; /* Lighter brown border */
+    --input: 21 23% 35%;
+    --ring: 147 41% 39%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 21 23% 25%;
+    --foreground: 40 33% 85%;
+
+    --card: 21 23% 20%;
+    --card-foreground: 40 33% 85%;
+
+    --popover: 21 23% 20%;
+    --popover-foreground: 40 33% 85%;
+
+    --primary: 147 41% 39%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 147 41% 39%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --success: 130 50% 40%;
+    --success-foreground: 0 0% 98%;
+
+    --border: 21 23% 35%;
+    --input: 21 23% 35%;
+    --ring: 147 41% 39%;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+    .bg-leaves {
+        background-image: url('/leaves-pattern.svg');
+        background-size: 400px;
+        animation: pan-bg 60s linear infinite;
+    }
+
+    @keyframes pan-bg {
+        0% {
+            background-position: 0% 0%;
+        }
+        100% {
+            background-position: 100% 100%;
+        }
+    }
 }

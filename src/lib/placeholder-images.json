@@ -1,0 +1,95 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": 8,
+      "name": "_Linaria semialata_",
+      "url": "https://image.jimcdn.com/app/cms/image/transf/dimension=1920x400:format=jpg/path/s9524efc545a304e8/image/idce7a1fdeba57c35/version/1678293891/image.jpg",
+      "type": "plant",
+      "options": [
+        {
+          "text": "_Linaria semialata_",
+          "isCorrect": true
+        },
+        {
+          "text": "_Linaria genistifolia_",
+          "isCorrect": false
+        },
+        {
+          "text": "_Linaria vulgaris_",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "name": "_Silene hifacensis_",
+      "url": "https://lamarinaalta.com/wp-content/uploads/2025/04/silene-hifacensis-autor-nacho-l-astilleros.jpg",
+      "type": "plant",
+      "options": [
+        {
+          "text": "_Silene hifacensis_",
+          "isCorrect": true
+        },
+        {
+          "text": "_Silene gallica_",
+          "isCorrect": false
+        },
+        {
+          "text": "_Silene noctiflora_",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Hoja de _Quercus coccifera_",
+      "url": "https://www.navarra.es/mapacultivos/fotos/sp_quercus_coccifera/image001b.jpg",
+      "type": "leaf"
+    },
+    {
+      "id": 10,
+      "name": "Árbol _Quercus coccifera_",
+      "url": "https://www.arbolapp.es/imagenes/especies/especie_111_04.jpg",
+      "type": "tree"
+    },
+    {
+      "id": 11,
+      "name": "Hoja de _Quercus ilex_",
+      "url": "https://guadarramistas.com/wp-content/uploads/2023/07/quercus-ilex-hojas.jpg",
+      "type": "leaf"
+    },
+    {
+      "id": 12,
+      "name": "Árbol _Quercus ilex_",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/8/85/Carrasca_de_la_Raboseras.JPG",
+      "type": "tree"
+    },
+    {
+      "id": 13,
+      "name": "Hoja de _Quercus faginea_",
+      "url": "https://floressilvestresdearagon.es/wp-content/uploads/2021/02/Quercus-faginea-faginea-07r-Borobia-Soria-FAGA.jpg",
+      "type": "leaf"
+    },
+    {
+      "id": 14,
+      "name": "Árbol _Quercus faginea_",
+      "url": "https://live.staticflickr.com/5166/5217895242_d58cfa2a28_b.jpg",
+      "type": "tree"
+    }
+  ],
+  "pairs": [
+    {
+      "leafId": 9,
+      "treeId": 10
+    },
+    {
+      "leafId": 11,
+      "treeId": 12
+    },
+    {
+      "leafId": 13,
+      "treeId": 14
+    }
+  ]
+}

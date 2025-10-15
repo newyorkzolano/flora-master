@@ -1,0 +1,29 @@
+
+{
+  "images": [
+    {
+      "id": "hoja_de_roble",
+      "name": "Hoja de Roble",
+      "url": "https://images.unsplash.com/photo-1520209268512-14f6b6534249",
+      "type": "leaf"
+    },
+    {
+      "id": "arbol_roble",
+      "name": "Árbol de Roble",
+      "url": "https://images.unsplash.com/photo-1598611103468-2329dc623223",
+      "type": "tree"
+    },
+    {
+      "id": "hoja_de_pino",
+      "name": "Hoja de Pino",
+      "url": "https://images.unsplash.com/photo-1574536417937-5269f84b834a",
+      "type": "leaf"
+    },
+    {
+      "id": "arbol_pino",
+      "name": "Árbol Pino",
+      "url": "https://images.unsplash.com/photo-1448375240586-882707db888b",
+      "type": "tree"
+    }
+  ]
+}

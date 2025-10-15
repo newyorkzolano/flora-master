@@ -25,14 +25,14 @@ type State = {
 };
 
 type Action =
-| { type: 'START_GAME' }
-| { type: 'ENTER_EDIT_MODE' }
-| { type: 'EXIT_EDIT_MODE' }
-| { type: 'COMPLETE_QUIZ'; payload: { score: number; total: number } }
-| { type: 'COMPLETE_IMAGE_GUESSING'; payload: { score: number; total: number } }
-| { type: 'COMPLETE_MATCHING'; payload: { score: number; total: number } }
-| { type: 'RESTART' }
-| { type: 'ANIMATION_COMPLETE' };
+  | { type: 'START_GAME' }
+  | { type: 'ENTER_EDIT_MODE' }
+  | { type: 'EXIT_EDIT_MODE' }
+  | { type: 'COMPLETE_QUIZ'; payload: { score: number; total: number } }
+  | { type: 'COMPLETE_IMAGE_GUESSING'; payload: { score: number; total: number } }
+  | { type: 'COMPLETE_MATCHING'; payload: { score: number; total: number } }
+  | { type: 'RESTART' }
+  | { type: 'ANIMATION_COMPLETE' };
 
 const initialState: State = {
   gameState: 'intro',
@@ -54,7 +54,7 @@ function gameReducer(state: State, action: Action): State {
     case 'ENTER_EDIT_MODE':
       return { ...state, gameState: 'edit' };
     case 'EXIT_EDIT_MODE':
-      return { ...state, gameState: 'setup'};
+        return { ...state, gameState: 'setup'};
     case 'COMPLETE_QUIZ':
       return {
         ...state,
@@ -63,19 +63,19 @@ function gameReducer(state: State, action: Action): State {
         totals: { ...state.totals, quiz: action.payload.total },
       };
     case 'COMPLETE_IMAGE_GUESSING':
-      return {
-        ...state,
-        gameState: 'matching',
-        scores: { ...state.scores, imageGuessing: action.payload.score },
-        totals: { ...state.totals, imageGuessing: action.payload.total },
-      };
+        return {
+            ...state,
+            gameState: 'matching',
+            scores: { ...state.scores, imageGuessing: action.payload.score },
+            totals: { ...state.totals, imageGuessing: action.payload.total },
+        };
     case 'COMPLETE_MATCHING':
-      return {
-        ...state,
-        gameState: 'end',
-        scores: { ...state.scores, matching: action.payload.score },
-        totals: { ...state.totals, matching: action.payload.total },
-      };
+        return {
+            ...state,
+            gameState: 'end',
+            scores: { ...state.scores, matching: action.payload.score },
+            totals: { ...state.totals, matching: action.payload.total },
+        };
     case 'RESTART':
       return {
         ...state,
@@ -84,7 +84,7 @@ function gameReducer(state: State, action: Action): State {
         gameState: 'setup',
       };
     default:
-      throw new Error(`Unhandled action type: ${(action as any).type}`);
+        throw new Error(`Unhandled action type: ${(action as any).type}`);
   }
 }
 
@@ -114,7 +114,7 @@ const GameContent = () => {
   const handleQuizComplete = (score: number, total: number) => {
     dispatch({ type: 'COMPLETE_QUIZ', payload: { score, total } });
   };
-
+  
   const handleImageGuessingComplete = (score: number, total: number) => {
     dispatch({ type: 'COMPLETE_IMAGE_GUESSING', payload: { score, total } });
   };
@@ -122,7 +122,7 @@ const GameContent = () => {
   const handleMatchingComplete = (score: number, total: number) => {
     dispatch({ type: 'COMPLETE_MATCHING', payload: { score, total } });
   };
-
+  
   const handleRestart = () => dispatch({ type: 'RESTART' });
 
   const handleExitEditMode = (newData?: GameData) => {
@@ -138,29 +138,29 @@ const GameContent = () => {
 
   const renderGameContent = () => {
     if (error) {
-      return (
-        <Alert variant="destructive" className="max-w-md">
-        <Icons.X className="h-4 w-4" />
-        <AlertTitle>Error al Cargar los Datos</AlertTitle>
-        <AlertDescription>
-        No se pudieron cargar los datos. Revisa la consola para más detalles.
-        <p className="mt-2 text-xs">({error})</p>
-        </AlertDescription>
-        </Alert>
-      )
+        return (
+            <Alert variant="destructive" className="max-w-md">
+              <Icons.X className="h-4 w-4" />
+              <AlertTitle>Error al Cargar los Datos</AlertTitle>
+              <AlertDescription>
+                  No se pudieron cargar los datos. Revisa la consola para más detalles.
+                  <p className="mt-2 text-xs">({error})</p>
+              </AlertDescription>
+            </Alert>
+        )
     }
 
     if (!isLoaded || !gameData) {
       return (
         <div className="flex flex-col items-center justify-center min-h-screen">
-        <Icons.Flower className="w-16 h-16 animate-spin text-primary" />
-        <p className="mt-4 text-lg text-primary/80">Cargando Flora Master...</p>
+          <Icons.Flower className="w-16 h-16 animate-spin text-primary" />
+          <p className="mt-4 text-lg text-primary/80">Cargando Flora Master...</p>
         </div>
       );
     }
-
+    
     const plantsForGuessing = gameData.images.filter(img => img.type === 'plant' && img.options && img.options.length > 0);
-
+    
     switch (state.gameState) {
       case 'intro':
         return <IntroScreen onAnimationComplete={handleAnimationComplete} />;
@@ -183,41 +183,41 @@ const GameContent = () => {
 
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 md:p-12 bg-background overflow-hidden bg-leaves">
-    {showConfetti && <Confetti recycle={false} numberOfPieces={300} />}
+        {showConfetti && <Confetti recycle={false} numberOfPieces={300} />}
+        
+        <header className="absolute top-4 left-4 sm:top-6 sm:left-8 z-20 flex items-center gap-2">
+            <Icons.Leaf className="w-8 h-8 text-primary" />
+            <h1 className="text-xl font-bold font-headline text-primary">Flora Master</h1>
+        </header>
 
-    <header className="absolute top-4 left-4 sm:top-6 sm:left-8 z-20 flex items-center gap-2">
-    <Icons.Leaf className="w-8 h-8 text-primary" />
-    <h1 className="text-xl font-bold font-headline text-primary">Flora Master</h1>
-    </header>
-
-    {(state.gameState === 'quiz' || state.gameState === 'image-guessing' || state.gameState === 'matching') && (
-      <div className="absolute top-4 right-4 z-20 bg-black/30 text-white px-4 py-2 rounded-lg font-bold">
-      Puntos: {totalScore}
-      </div>
-    )}
-    <div className="z-10 w-full h-full flex flex-col items-center justify-center">
-    <AnimatePresence mode="wait">
-    <motion.div
-    key={state.gameState}
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -20 }}
-    transition={{ duration: 0.4, ease: 'easeInOut' }}
-    className="w-full flex justify-center"
-    >
-    {renderGameContent()}
-    </motion.div>
-    </AnimatePresence>
-    </div>
+        {(state.gameState === 'quiz' || state.gameState === 'image-guessing' || state.gameState === 'matching') && (
+            <div className="absolute top-4 right-4 z-20 bg-black/30 text-white px-4 py-2 rounded-lg font-bold">
+                Puntos: {totalScore}
+            </div>
+        )}
+        <div className="z-10 w-full h-full flex flex-col items-center justify-center">
+            <AnimatePresence mode="wait">
+                <motion.div
+                    key={state.gameState}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.4, ease: 'easeInOut' }}
+                    className="w-full flex justify-center"
+                >
+                    {renderGameContent()}
+                </motion.div>
+            </AnimatePresence>
+        </div>
     </main>
   );
 }
 
 
 const Home = () => {
-  return (
-    <GameContent />
-  );
+    return (
+        <GameContent />
+    );
 };
 
 export default Home;

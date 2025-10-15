@@ -1,0 +1,23 @@
+
+{
+  "images": [
+    {
+      "id": "tulipan_rosa",
+      "name": "Tulipán Rosa",
+      "url": "https://images.unsplash.com/photo-1520763185298-1b434c919102",
+      "type": "plant"
+    },
+    {
+      "id": "silene_hifacensis",
+      "name": "Silene de Ifach",
+      "url": "https://lamarinaalta.com/wp-content/uploads/2025/04/silene-hifacensis-autor-nacho-l-astilleros.jpg",
+      "type": "plant"
+    },
+    {
+      "id": "jarilla_blanca_de_gato",
+      "name": "Jarilla Blanca de Gato",
+      "url": "https://image.jimcdn.com/app/cms/image/transf/dimension=1920x400:format=jpg/path/s9524efc545a304e8/image/idce7a1fdeba57c35/version/1678293891/image.jpg",
+      "type": "plant"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+
+{
+  "questions": [
+    {
+      "id": "q1",
+      "questionText": "¿Cuál de estas plantas es conocida por su capacidad para sobrevivir en climas desérticos?",
+      "options": [
+        "Helecho",
+        "Cactus",
+        "Rosa",
+        "Orquídea"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "id": "q2",
+      "questionText": "¿Qué parte de la planta es la principal responsable de la fotosíntesis?",
+      "options": [
+        "Raíz",
+        "Tallo",
+        "Hoja",
+        "Flor"
+      ],
+      "correctAnswerIndex": 2
+    }
+  ]
+}
