@@ -191,4 +191,33 @@ const GameContent = () => {
     </header>
 
     {(state.gameState === 'quiz' || state.gameState === 'image-guessing' || state.gameState === 'matching') && (
+      <div className="absolute top-4 right-4 z-20 bg-black/30 text-white px-4 py-2 rounded-lg font-bold">
+      Puntos: {totalScore}
+      </div>
+    )}
+    <div className="z-10 w-full h-full flex flex-col items-center justify-center">
+    <AnimatePresence mode="wait">
+    <motion.div
+    key={state.gameState}
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -20 }}
+    transition={{ duration: 0.4, ease: 'easeInOut' }}
+    className="w-full flex justify-center"
+    >
+    {renderGameContent()}
+    </motion.div>
+    </AnimatePresence>
+    </div>
+    </main>
+  );
+}
 
+
+const Home = () => {
+  return (
+    <GameContent />
+  );
+};
+
+export default Home;
